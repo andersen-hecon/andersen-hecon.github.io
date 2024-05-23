@@ -1,0 +1,96 @@
+---
+title: "Research"
+---
+
+I am a health economist with an interest and, recently, a focus on applied research using human mobility data derived from smartphones.  
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(RefManageR)
+
+```
+
+```{r get-pubs, include=FALSE}
+
+bib <- ReadBib('all_papers.bib')
+
+bib<-bib[order(sapply(bib, \(x) x$year), decreasing = TRUE)]
+
+published_papers<-
+  bib[which(bib$bibtype=="Article")]
+
+working_papers<-
+  bib[which(bib$bibtype!="Article")]
+
+
+# 
+# 
+# 
+# bib$bibtype=="Article"
+# 
+# 
+# my_scholar_id="IxJvxPgAAAAJ"
+# 
+# 
+# my_pubs<-get_publications(my_scholar_id)%>%
+#   as_tibble()
+# 
+# my_pubs%>%
+#   rowwise()%>%
+#   mutate(
+#     url=get_publication_url(my_scholar_id,pub_id = pubid),
+#   )%>%
+#   ungroup()%>%
+#   mutate(
+#     out=glue::glue("[{title}]({url})")
+#     )%>%
+#   .$out
+  
+
+```
+
+# Published papers
+
+```{r, results='asis', echo=FALSE}
+output <- lapply(published_papers, function(x) {
+  authors <- paste(x$author, collapse=", ")
+  title <- str_remove_all(x$title,"(\\{|\\})")
+  link <- x$url
+  abstract <- x$abstract
+  year<-x$year
+  
+  cat(paste0("### ", title," (",year,")\n",
+             "**Authors:** ", authors, "  \n",
+             "[Read the paper](", link, ")  \n",
+             "<details>\n",
+             "<summary>Abstract</summary>\n",
+             abstract, "\n",
+             "</details>\n\n"))
+})
+
+invisible(output)
+```
+
+# Working papers
+
+```{r, results='asis', echo=FALSE}
+output <- lapply(working_papers, function(x) {
+  authors <- paste(x$author, collapse=", ")
+  title <- str_remove_all(x$title,"(\\{|\\})")
+  link <- x$url
+  abstract <- x$abstract
+  year<-x$year
+  
+  cat(paste0("### ", title," (",year,")\n",
+             "**Authors:** ", authors, "  \n",
+             "[Read the paper](", link, ")  \n",
+             "<details>\n",
+             "<summary>Abstract</summary>\n",
+             abstract, "\n",
+             "</details>\n\n"))
+})
+
+invisible(output)
+```
+
+# Active projects

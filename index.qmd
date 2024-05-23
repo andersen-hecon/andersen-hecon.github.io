@@ -1,0 +1,21 @@
+---
+title: "Home"
+---
+
+I am an Associate Professor in the [Department of Economics](economics.uncg.edu) at the [University of North Carolina at Greensboro](uncg.edu).
+
+My research interests are in the area of human mobility with an emphasis on health consequences.
+
+![](images/ma-27.jpg){width="50%"}
+
+Department of Economics
+
+University of North Carolina Greensboro
+
+Bryan Building 448
+
+PO Box 26165
+
+Greensboro, NC 27402-6165
+
+[msander4\@uncg.edu](mailto:msander4@uncg.edu)
