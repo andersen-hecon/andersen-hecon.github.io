@@ -2,7 +2,7 @@
 title: "Research"
 ---
 
-I am a health economist with an interest and, recently, a focus on applied research using human mobility data derived from smartphones.  
+I am a health economist with an interest and, recently, a focus on applied research using human mobility data derived from smartphones.
 
 ```{r setup, include=FALSE}
 library(tidyverse)
@@ -59,7 +59,7 @@ output <- lapply(published_papers, function(x) {
   abstract <- x$abstract
   year<-x$year
   
-  cat(paste0("### ", title," (",year,")\n",
+  cat(paste0("#### ", title," (",year,")\n",
              "**Authors:** ", authors, "  \n",
              "[Read the paper](", link, ")  \n",
              "<details>\n",
@@ -81,7 +81,7 @@ output <- lapply(working_papers, function(x) {
   abstract <- x$abstract
   year<-x$year
   
-  cat(paste0("### ", title," (",year,")\n",
+  cat(paste0("#### ", title," (",year,")\n",
              "**Authors:** ", authors, "  \n",
              "[Read the paper](", link, ")  \n",
              "<details>\n",
