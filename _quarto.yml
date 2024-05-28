@@ -14,6 +14,12 @@ website:
     tools: 
       - icon: twitter
         href: https://x.com/andersen_hecon
+      - icon: github
+        href: https://github.com/andersen-hecon
+  twitter-card: true
+  open-graph: true
+  google-analytics: UA-34774254-1
+
 
 format:
   html:
