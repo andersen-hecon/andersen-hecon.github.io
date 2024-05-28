@@ -5,6 +5,9 @@ title: "Research"
 I am a health economist with an interest and, recently, a focus on applied research using human mobility data derived from smartphones.
 
 ```{r setup, include=FALSE}
+if(!"knitr" %in% installed.packages()) {
+  install.packages("knitr")
+}
 library(tidyverse)
 library(RefManageR)
 
