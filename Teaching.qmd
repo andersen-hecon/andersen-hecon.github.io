@@ -4,8 +4,6 @@ title: "Teaching"
 
 I have taught a variety of courses during my time at UNCG. Currently I regularly teach ECO 637, Empirical Health Economics, ECO 498, Capstone Seminar in Economics, and ECO 201, Principles of Microeconomics. I have previously taught Health Economics at both the undergraduate and doctoral level and microeconomic theory at the master's level.
 
-making a change to activate workflow
-
 <!-- ## ECO 201 - Principles of Microeconomics -->
 
 <!-- ## ECO 390 - Health Economics -->

@@ -2,9 +2,11 @@
 title: "Home"
 ---
 
-I am an Associate Professor in the [Department of Economics](economics.uncg.edu) at the [University of North Carolina at Greensboro](uncg.edu).
+I am **Martin Sparre Andersen**, an Associate Professor in the [Department of Economics](economics.uncg.edu) at the Bryan School of Business and Economics at the [University of North Carolina at Greensboro](uncg.edu). I hold a BA in Mathematics from Columbia University, an MPH in Health Policy from Yale University, and a PhD in Health Policy with a concentration in Economics from Harvard University. After completing my doctoral studies, I pursued a one-year postdoctoral fellowship at the National Bureau for Economic Research.
 
-My research interests are in the area of human mobility with an emphasis on health consequences.
+My primary research interests lie in the fields of health and education economics, with a particular focus on utilizing human mobility data. To date, I have been involved in projects on cancer care, health insurance, prescription drug benefit design, and reproductive health care. I am also active in, essentially, epidemiological research, trying to infer disease trends from mobility data.
+
+You can book a meeting with me [here](https://outlook.office.com/bookwithme/user/c346e8553534431eb7565471d70d6048@uncg.edu?anonymous&ep=plink)
 
 ![](new_headshot.jpg){width="50%"}
 
