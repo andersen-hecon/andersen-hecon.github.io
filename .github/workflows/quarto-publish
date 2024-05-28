@@ -2,6 +2,9 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
+    braches:
+      - main
 
 name: Render and Publish
 
