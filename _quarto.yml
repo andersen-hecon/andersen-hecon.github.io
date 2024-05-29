@@ -12,7 +12,7 @@ website:
       - Research.qmd
       - Teaching.qmd
     tools: 
-      - icon: twitter
+      - icon: twitter-x
         href: https://x.com/andersen_hecon
       - icon: github
         href: https://github.com/andersen-hecon
