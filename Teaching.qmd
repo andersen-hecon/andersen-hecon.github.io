@@ -13,3 +13,7 @@ I have taught a variety of courses during my time at UNCG. Currently I regularly
 <!-- ## ECO 637 - Empirical Health Economics -->
 
 <!-- ## ECO 737 - Health Economics -->
+
+## Using AI in teaching
+
+I have become a big fan of using large language models to support my teaching. Currently, I have several ChatGPT bots that I have setup with course materials, or the closest I could get that I could feed into the chatbot, so that I can use the bot to help me with material development.
