@@ -15,6 +15,7 @@ permissions:
 
 jobs:
   build:
+    name: render
     runs-on: ubuntu-latest
     
     steps:
@@ -89,23 +90,4 @@ jobs:
       #     CONFLUENCE_USER_EMAIL: ${{ secrets.CONFLUENCE_USER_EMAIL }}
       #     CONFLUENCE_AUTH_TOKEN: ${{ secrets.CONFLUENCE_AUTH_TOKEN }}
       #     CONFLUENCE_DOMAIN: ${{ secrets.CONFLUENCE_DOMAIN }}
-  deploy:
-    environment:
-      name: gh-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          # Upload entire repository
-          path: '.'
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4    
-      
-      
+  
