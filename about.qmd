@@ -4,10 +4,10 @@ title: "About Me"
 
 I am **Martin Sparre Andersen**, an Associate Professor in the Department of Economics at the Bryan School of Business and Economics at the University of North Carolina at Greensboro. I hold a BA in Mathematics from Columbia University, an MPH in Health Policy from Yale University, and a PhD in Health Policy with a concentration in Economics from Harvard University. After completing my doctoral studies, I pursued a one-year postdoctoral fellowship at the National Bureau for Economic Research.
 
+I chose to study health policy after a stint as a healthcare investment banker, where I became acutely aware of the deficiencies in the U.S. healthcare system. Driven by a desire to effect change rather than merely complain about these issues, I embarked on a path to learn more about health policy and ultimately found my passion in health economics.
+
 My primary research interests lie in the fields of health and education economics, with a particular focus on utilizing human mobility data to study various topics. <!-- One of my most notable works is the paper "College openings in the United States increase mobility and COVID-19 incidence," which demonstrated that college reopenings in the Fall of 2020 led to a significant increase in COVID-19 cases over the subsequent eight weeks. -->
 
 In addition to my research, I am deeply committed to teaching. I take great pride in teaching Principles of Microeconomics, a course that is often one of the first college experiences for many of my students, who are frequently first-generation college students. It is incredibly rewarding for me, and I am honored to play a role in their educational journey.
-
-I chose to study health policy after a stint as a healthcare investment banker, where I became acutely aware of the deficiencies in the U.S. healthcare system. Driven by a desire to effect change rather than merely complain about these issues, I embarked on a path to learn more about health policy and ultimately found my passion in health economics.
 
 Outside of my professional life, I enjoy cooking and baking, with a particular talent for making macarons. I also love reading and spending time playing with my children.
