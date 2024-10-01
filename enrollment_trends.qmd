@@ -1,0 +1,38 @@
+---
+title: "Untitled"
+format: 
+  revealjs:
+    pagetitle: "Enrollment trends"
+editor: visual
+---
+## Enrollment trends (national data)
+```{r}
+library(tidyverse)
+data<-
+  read_csv("data/degrees-awarded.csv", show_col_types = FALSE)|>
+  janitor::clean_names()
+
+
+g<-
+  data|>
+  filter(!name %in% c("CIP Missing", "Military Technologies"))|>
+  mutate(
+    Major=str_wrap(name,32),
+    `Annualized growth rate (2015-16 to 2022-23)`=round(100*cagr_from_2015_2016,1),
+    `Absolute change (2015-16 to 2022-23)`=round(absolute_increase,0),
+    `Degrees awarded in 2022-23`=round(x2022_23_degrees,0)
+  )|>
+  ggplot(aes(x=`Annualized growth rate (2015-16 to 2022-23)`,
+             y=`Absolute change (2015-16 to 2022-23)`,
+             size=`Degrees awarded in 2022-23`,
+             label=Major,
+             color=Major)
+         )+
+  geom_hline(yintercept = 0)+
+  geom_vline(xintercept = 0)+
+  geom_point()+
+  ggthemes::theme_clean()+
+  theme(legend.position ="none")
+
+plotly::ggplotly(g)
+```
