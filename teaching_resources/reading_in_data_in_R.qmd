@@ -1,0 +1,428 @@
+---
+title: "Reading in data and basic data manipulation using R"
+format: html
+  # closeread-html:
+  #   remove-header-space: true
+---
+
+## Getting started
+
+In this page we will get started using R to read in data. In other webpages we will work on installing R and RStudio, installing packages, and analyzing the data that we have read in.
+
+To read in our data, we will use R's `tidyverse` family of libraries. Before we begin, let's make sure that we have the most recent version of `tidyverse` installed:
+
+> install.packages("tidyverse")
+
+Depending on when you last updated your computer this may, or may not, result in a bunch of output about installing the package.
+
+Next, let's load the library:
+
+> library(tidyverse)
+
+```{r}
+#| eval: true
+#| echo: FALSE
+library(tidyverse)
+```
+
+The output that follows `library("tidyverse")` is fairly typical and is R's way of telling you that if you type in certain commands, such as `filter`, you may get the results of a different function than the one that you expected. The double colon notation (`::`) is a way to make sure that you got the version of the command that you wanted to use. So if you wanted to use the `filter` command from the `stats` package after this you would type `stats::filter` instead of just `filter`.
+
+## Reading data with R
+
+Now that we have loaded the `tidyverse`, let's go get the data file. For this example, we are using a cleaned dataset that I have created from the National Health Interview Survey to demonstrate how insurance coverage changes over time. This file is located at https://andersen-hecon.github.io/data/nhis_for_example.csv and we can load the file (and assign it to the name `data`) using the code:
+
+> data\<-read_csv("https://andersen-hecon.github.io/data/nhis_for_example.csv")
+
+As you can see below, executing this code results in R providing some data about the file--in particular the "Delimiter," or how the columns of data are divided (commas in this case), and the types and names of the columns.
+
+```{r}
+#| eval: true
+#| echo: false
+
+data<-read_csv("https://andersen-hecon.github.io/data/nhis_for_example.csv")
+
+
+```
+
+We can suppress (or eliminate) this information using the option "show_col_types=FALSE" so that the code would read:
+
+> data\<-read_csv("https://andersen-hecon.github.io/data/nhis_for_example.csv", show_col_types=FALSE)
+
+Notice now that we have loaded the file that it appears in the environment window in the top right corner of the RStudio window:
+
+![](/images/Rstudio_show_data_env.png)
+
+## Summarizing data
+
+We can look at the data we have loaded in several ways. The easiest (in RStudio) is to use the viewer either by clicking on the `data` object in the environment window or by typing `View(data)` in the console window. These ways of viewing the data provide a detailed, line by line, view of the data. We can achieve something similar by typing `data` or `print(data)` at the console:
+
+```{r}
+#| echo: false
+data
+```
+
+Please pay careful attention to the last line of the output ("\# ℹ 2 more variables: mcaid_insurance <dbl>, mcare_insurance <dbl>"), which indicate that the screen wasn't wide enough to show two of the variables (`mcaid_insurace` and `mcare_insurance`). Viewing the data allows us to see more variables and columns in RStudio:
+
+![](/images/RStudio_data_in_viewer.png)
+
+Lastly, we can use the `summary` command to get some characteristics about the data and each variable by typing `summary(data)` at the console:
+
+```{r}
+#| echo: false
+summary(data)
+```
+
+The `summary` command provides useful information for datasets including the number of missing observations (in these data there are no missing observations) and measures of the distribution of each numerical variable. We can look at categorical variables using a variety of commands. One of the easiest is to `count` the levels of a variable, which reports the number of observations with each combination of values that you list in the `count` command:
+
+Here we `count(data, sex)`, which lists the number of observations in `data` by `sex`.
+
+```{r}
+#| echo: false
+data|>
+  count(sex)
+```
+
+You may be looking at the output above and wondering what is up with those values--do they make sense? In this case the answer is NO! When I created this dataset I aggregated an individual level dataset up to the age-by-sex-by-year, level. The (weighted) number of observations in each cell is in the variable `pop` in the dataset. As an exercise, use the help information for `count` (which you can get to by typing `?count` in the console) to figure out how you might account for the `pop` in each cell. Here is my answer:
+
+```{r}
+#| echo: false
+count(data, sex, wt=pop)
+```
+
+::: callout-tip
+## Tip
+
+R allows you to chain commands together using a "pipe" character (`|>` that is `|` followed by `>`). This allows you to rewrite things like `count(data,sex)` as `data|>count(sex)`. This feature allows you to break out the "nouns" in your process (i.e. `data`) from the verbs (i.e. `count(sex)`). I will use this notation below.
+:::
+
+## The core `dplyr` verbs
+
+There are five main `dplyr` "verbs":
+
+-   `select`, which allows you to select and reorder variables from a dataframe
+-   `mutate`, which allows you to create new or change existing variables (it is also possible to remove a variable).
+-   `filter`, subsets a dataframe based on the condition(s) you provide in the `filter` statement
+-   `summarize` aggregates a dataframe into groups that you define using either `group_by()` or the `.by` argument to `summarize`
+-   `arrange` sorts and reorders a dataframe
+
+### `select`
+
+The `select` command allows you to subset, reorder, and rename variables from a dataframe.
+
+#### Subsetting
+
+For example, if we wanted to select only the variables `year`, `sex`, and `age` from the `data` dataframe we would type:
+
+> data\|\>select(year,sex,age)
+
+The output would look something like this:
+
+```{r}
+#| echo: false
+#| 
+data|>select(year,sex,age)
+```
+
+I like to use the `select` command when I am writing code to help me make sure that I coded up a variable correctly, something that we will get to in the next command.
+
+#### Reordering
+
+Another use of the `select` command is to reorder the variables in a dataframe. For example, if we wanted to reorder the variables in the `data` dataframe so that `age` was the first variable, we would type:
+
+> data\|\>select(age,everything())
+
+The output would look something like this:
+
+```{r}
+#| echo: false
+#| 
+data|>select(age, everything())
+```
+
+Now age is the first column of the dataframe.
+
+#### Renaming
+
+Finally, we can use the `select` command to rename variables. For example, if we wanted to rename the variable `year` to `yr` we would type:
+
+> data\|\>select(yr=year, everything())
+
+The output would look something like this:
+
+```{r}
+#| echo: false
+#| 
+data|>select(yr=year, everything())
+```
+
+### `mutate`
+
+The `mutate` command can be used to create new variables by "assigning" a value to a variable name. For example, we can create a new variable `age_squared` that is the square of `age` by typing:
+
+> data\|\>mutate(age_squared=age\^2)
+
+If you run that line of code in your console window you should see something like:
+
+```{r}
+#| echo: false
+
+data|>mutate(age_squared=age^2)
+```
+
+Note that we have now created a new column, but we can only tell by looking at the bottom line of the output. Let's fix that by using the `select` command:
+
+> data\|\>mutate(age_squared=age\^2)\|\>select(age, age_squared,everything())
+
+```{r}
+#| echo: false
+
+data|>mutate(age_squared=age^2)|>select(age, age_squared,everything())
+```
+
+Now, take a look at the output. Is it correct? Is the second column the square of the first column? If not, what went wrong?
+
+We will use the `mutate` command to create a new variable that creates two variables that we will use later. First, we will create a variable `over65` that equals 1 if `age` is greater than or equal to 65.
+
+> data\|\>mutate(over65=if_else(age\>=65,1,0))
+
+```{r}
+#| echo: false
+
+data|>mutate(over65=if_else(age>=65,1,0))|>select(age, over65,everything())
+```
+
+Let's look at `over65` using `count` too:
+
+> count(data,over65)
+
+```{r}
+#| echo: false
+#| error: true
+count(data,over65)
+```
+
+Wait! We got an error! Why? Because `over65` isn't there! What happened?
+
+R doesn't update a dataframe with the calculations that you did, unless you explicitly tell it to do so. How do we do that? We can use the `=` or `<-`. The differences between these two are a bit technical and not worth diving into. For now, let's run that command again, but this time assign the results to `data`:
+
+> data\<-data\|\>mutate(over65=if_else(age\>=65,1,0))
+
+```{r}
+#| echo: false
+
+data<-data|>mutate(over65=if_else(age>=65,1,0))
+count(data,over65)
+```
+
+Now, let's create one more variable `age_minus_65` which, as the name suggests, is simply `age` minus 65:
+
+> data\<-data\|\>mutate(age_minus_65=age-65)
+
+```{r}
+#| echo: false
+data<-data|>mutate(age_minus_65=age-65)
+```
+
+We can check if we got it right by `count`ing the `age` and `age_minus_65`:
+
+> data\|\>count(age,age_minus_65)
+
+```{r}
+#| echo: false
+data|>count(age,age_minus_65)
+```
+
+### `filter`
+
+The `filter` command allows you to subset the rows of your data (not columns, which is what `select` does) using a conditional expression. For example, if we wanted to select only the rows of the `data` dataframe where `age` is greater than or equal to 65 we would type:
+
+> data\|\>filter(age\>=65)
+
+```{r}
+#| echo: false
+data|>filter(age>=65)
+```
+
+In this output, the first value of `age` that we see is 65, which is what we would expect.
+
+You can also do more complicated expressions. For example, if we wanted to select only the rows of the `data` dataframe where `age` is greater than or equal to 65 and `sex` is equal to 1 we would type:
+
+> data\|\>filter(age\>=65, sex==1)
+
+```{r}
+#| echo: false
+data|>filter(age>=65, sex==1)
+```
+
+::: callout-tip
+## Tip: Logical comparisons in R
+| Symbol | Description | Example |
+|------|------|------|
+| \> | Greater than | 5 \> 6 returns FALSE |
+| \< | Less than | 5 \< 6 returns TRUE |
+| == | Equals to | 10 == 10 returns TRUE |
+| != |Not equal to | 10 != 10 returns FALSE |
+|\>= |Greater than or equal to| 5 \>= 6 returns FALSE|
+|\<= |Less than or equal to |6 \<= 6 returns TRUE|
+:::
+
+When using the `filter` command, you can put in multiple statements (like we did to filter by age AND sex). But, when you do that the `filter` command only keeps rows that meet all of those criteria. If you want to keep rows that meet any of the criteria you can use the `|` symbol. For example, if we wanted to select only the rows of the `data` dataframe where `age` is greater than or equal to 65 OR `sex` is equal to 1 we would type:
+
+
+> data\|\>filter(age\>=65 | sex==1)
+
+```{r}
+#| echo: false
+data|>filter(age>=65 | sex==1)
+```
+
+Think about how you would check if you got the right answer. What would you do?
+
+### summarize
+
+Sometimes you want to summarize or aggregate your data, either to simplify your analysis later on, make a dataset that is easier for students to use, or other reasons. You do that with the `summarize` verb in R. For example, if we wanted to summarize the `data` dataframe by `year` and `sex` we would type:
+> data|>group_by(year,sex)|>summarize(mean_age=mean(age),n=n())
+
+```{r}
+data|>group_by(year,sex)|>summarize(mean_age=mean(age),n=n())
+```
+
+Hmmm.... this doesn't look right, does it? Every combination appears to have the same `mean_age` and `n`. What went wrong? The problem is that we didn't tell R to calculate the mean and count taking into account the number of observations wihtin each cell. We can do that in one of two ways. We can use the `weighted.mean` command to compute the weighted mean (and then use the `sum` command to get the sum of pop). But we can also go back to "first principles" and remember that the mean of a variable is the sum of the variable times the weight divided by the sum of the weight. 
+
+So, we can calculate the mean of `age` by `year` and `sex` by typing:
+
+> data|>group_by(year,sex)|>summarize(
+>  mean_age=sum(age\*pop)/sum(pop),
+> n=sum(pop))
+
+```{r}
+data|>group_by(year,sex)|>summarize(
+  mean_age=sum(age*pop)/sum(pop),
+ n=sum(pop))
+
+```
+This looks better. There is now some variation in the average age and the group sizes. In the next page, we will dive into this a bit more carefully when we introduce `ggplot` as a means to visualize data.
+
+Wait a minute, what is `gorup_by` doing? `group_by` is a little helper verb that makes everything that follows run at the level of each individual group. For `mutate` this isn't (usually) a big deal, but for `summarize` it is vital because that is how we tell `summarize` what groups to use for `summarize`ing the data.
+
+
+::: callout-tip
+## Tip: `group_by` and `.by`
+Most `tidyverse` commands that work with groups have a `.by` argument that allows you to specify the groups that you want to use. For example, you could have written the `summarize` command above as:
+> data|>summarize(
+>  mean_age=sum(age\*pop)/sum(pop),
+> n=sum(pop), .by=c(year,sex))
+
+Where the final `c` function tells R to use BOTH `year` and `sex` together to construct the groups. 
+:::
+
+
+
+
+#### Summarizing multiple variables at once
+Suppose we wanted to compute the weighted average of a few more variables (not just age). Maybe we wanted to look at changes in isnurance coverage by `year` (we will ignore `sex` for the moment). We can use the `across` command to help us out. `across` takes a list of variable names and a function template to do the same computation across the columns. To calculate the average age, the average of `mcaid_insurance`, the average of `pricate_insruance`. and the average of `mcare_insurance` by `year` we would type:
+
+> data|>group_by(year)|>
+>   summarize(
+>     across(
+>      c(age,mcaid_insurance,private_insurance,mcare_insurance),
+>      ~sum(.x\*pop)/sum(pop)
+>     )
+>   )
+
+```{r}
+data|>
+  group_by(year)|>
+  summarize(across(c(age,mcaid_insurance,private_insurance,mcare_insurance),~sum(.x*pop)/sum(pop)))
+
+```
+Now we see that we have the columns that we want!
+
+### `arrange`
+The final verb we will cover is `arrange`, which is used to `arrange` or order a dataframe. For example, if we wanted to order the `data` dataframe by `age` we would type:
+
+> data|>arrange(year)
+
+```{r}
+#| echo: false
+data|>arrange(age)
+```
+Now we see the values for age 0 by year and then if you went down the table you would see the values for age 1 by year, and so on.
+
+We can even arrange by more than one variable by simply adding another variable to the list:
+
+> data|>arrange(year,any_insurance)
+
+```{r}
+#| echo: false
+data|>arrange(age, any_insurance)
+```
+Now the data are sorted by age and then the fraction with any private insurance. But what if we wanted to see the year when each age group had the highest level of insurance? Then we need to switch from the default "ascending" sort order to a "descending" sort order, which we can do with the `desc` operator:
+
+> data|>arrange(year,desc(any_insurance))
+
+```{r}
+#| echo: false
+data|>arrange(age, desc(any_insurance))
+```
+Now we have `any_insurance` in a decreasing order within each of the `age` groups.
+
+## Practice
+Here are some practice exercises that you can do with the `data` dataframe and the core `dplyr` verbs.
+
+1.  Calculate average insurance coverage (for each type) using the `over65` variable that we created earlier by year.
+
+::: {.callout-note collapse="true" title="My result"}
+To highlight an event of particular interest, I am going to show results for the years 2012 through 2016
+
+```{r}
+#| echo: false
+
+data|>
+  filter(year>=2012, year<=2016)|>
+  group_by(
+    over65,year
+  )|>
+  summarize(across(c(age,any_insurance,mcaid_insurance,private_insurance,mcare_insurance),~sum(.x*pop)/sum(pop)))
+  
+```
+:::
+
+2.  Calculate the number of people with any insurance by year
+
+::: {.callout-tip collapse="true" title="Hint"}
+You will need to do a calculation along the way. You can either do that in a `mutate` step or in the `summarize` step. I would recommend the `mutate` step.
+:::
+
+::: {.callout-note collapse="true" title="My result"}
+```{r}
+#| echo: false
+
+data|>
+  mutate(
+    number_insured=pop*any_insurance
+  )|>
+  group_by(
+    year
+  )|>
+  summarize(number_insured=sum(number_insured))
+  
+```
+:::
+3.  Create a new variable `post_ACA` that equals 1 if the year if greater than or equal 2014 and 0 otherwise. Then calculate the average of `any_insurance` in each of the cells defined by `post_ACA`, `over65` and `sex`. 
+
+::: {.callout-note collapse="true" title="My result"}
+```{r}
+#| echo: false
+
+data|>
+  mutate(
+    post_ACA=if_else(year>=2014,1,0)
+  )|>
+  group_by(
+    post_ACA,over65,sex
+  )|>
+  summarize(any_insurance=sum(any_insurance*pop)/sum(pop))
+  
+```
+:::
