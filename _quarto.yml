@@ -1,8 +1,7 @@
 project:
   type: website
-  
-resources:
-  - "teaching_resources/nhis_for_example.csv"
+  resources:
+    - "teaching_resources/nhis_for_example.csv"
 
 
 website:
