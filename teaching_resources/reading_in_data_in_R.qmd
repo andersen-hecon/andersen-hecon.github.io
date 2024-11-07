@@ -39,7 +39,7 @@ As you can see below, executing this code results in R providing some data about
 #| eval: true
 #| echo: false
 
-data<-read_csv("https://andersen-hecon.github.io/teaching_resources/nhis_for_example.csv")
+data<-read_csv("teaching_resources/nhis_for_example.csv")
 
 
 ```
