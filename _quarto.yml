@@ -19,6 +19,8 @@ website:
   twitter-card: true
   open-graph: true
   google-analytics: G-J57709YH4W
+  resources:
+    - "teaching_resources/nhis_for_example.csv"
 
 
 format:

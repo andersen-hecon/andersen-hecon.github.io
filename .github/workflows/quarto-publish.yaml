@@ -73,15 +73,15 @@ jobs:
       #     CONNECT_SERVER: enter-the-server-url-here
       #     CONNECT_API_KEY: ${{ secrets.CONNECT_API_KEY }} 
 
-      - name: Copy file to gh-pages branch
-        run: |
-          git config --global user.name 'github-actions[bot]'
-          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-          git checkout gh-pages
-          cp teaching_resources/nhis_for_example.csv data/nhis_for_example.csv
-          git add data/nhis_for_example.csv
-          git commit -m "Copy file from main to gh-pages"
-          git push origin gh-pages
+      # - name: Copy file to gh-pages branch
+      #   run: |
+      #     git config --global user.name 'github-actions[bot]'
+      #     git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+      #     git checkout gh-pages
+      #     cp teaching_resources/nhis_for_example.csv data/nhis_for_example.csv
+      #     git add data/nhis_for_example.csv
+      #     git commit -m "Copy file from main to gh-pages"
+      #     git push origin gh-pages
 
       # NOTE: If Publishing to GitHub Pages, set the permissions correctly (see top of this yaml)
       - name: Publish to GitHub Pages (and render)
