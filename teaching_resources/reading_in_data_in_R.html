@@ -1,0 +1,1440 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.5.57">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Reading in data and basic data manipulation using R – Martin S Andersen</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-J57709YH4W"></script>
+
+<script type="text/javascript">
+
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-J57709YH4W', { 'anonymize_ip': true});
+</script>
+
+
+<link rel="stylesheet" href="../styles.css">
+<meta property="og:title" content="Reading in data and basic data manipulation using R – Martin S Andersen">
+<meta property="og:description" content="">
+<meta property="og:site_name" content="Martin S Andersen">
+<meta name="twitter:title" content="Reading in data and basic data manipulation using R – Martin S Andersen">
+<meta name="twitter:description" content="">
+<meta name="twitter:card" content="summary">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Martin S Andersen</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../about.html"> 
+<span class="menu-text">About Me</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../Research.html"> 
+<span class="menu-text">Research</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../Teaching.html"> 
+<span class="menu-text">Teaching</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+    <a href="https://x.com/andersen_hecon" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-twitter-x"></i></a>
+    <a href="https://github.com/andersen-hecon" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-github"></i></a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#getting-started" id="toc-getting-started" class="nav-link active" data-scroll-target="#getting-started">Getting started</a></li>
+  <li><a href="#reading-data-with-r" id="toc-reading-data-with-r" class="nav-link" data-scroll-target="#reading-data-with-r">Reading data with R</a></li>
+  <li><a href="#summarizing-data" id="toc-summarizing-data" class="nav-link" data-scroll-target="#summarizing-data">Summarizing data</a></li>
+  <li><a href="#the-core-dplyr-verbs" id="toc-the-core-dplyr-verbs" class="nav-link" data-scroll-target="#the-core-dplyr-verbs">The core <code>dplyr</code> verbs</a>
+  <ul class="collapse">
+  <li><a href="#select" id="toc-select" class="nav-link" data-scroll-target="#select"><code>select</code></a></li>
+  <li><a href="#mutate" id="toc-mutate" class="nav-link" data-scroll-target="#mutate"><code>mutate</code></a></li>
+  <li><a href="#filter" id="toc-filter" class="nav-link" data-scroll-target="#filter"><code>filter</code></a></li>
+  <li><a href="#summarize" id="toc-summarize" class="nav-link" data-scroll-target="#summarize">summarize</a></li>
+  <li><a href="#arrange" id="toc-arrange" class="nav-link" data-scroll-target="#arrange"><code>arrange</code></a></li>
+  </ul></li>
+  <li><a href="#practice" id="toc-practice" class="nav-link" data-scroll-target="#practice">Practice</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Reading in data and basic data manipulation using R</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="getting-started" class="level2">
+<h2 class="anchored" data-anchor-id="getting-started">Getting started</h2>
+<p>In this page we will get started using R to read in data. In other webpages we will work on installing R and RStudio, installing packages, and analyzing the data that we have read in.</p>
+<p>To read in our data, we will use R’s <code>tidyverse</code> family of libraries. Before we begin, let’s make sure that we have the most recent version of <code>tidyverse</code> installed:</p>
+<blockquote class="blockquote">
+<p>install.packages(“tidyverse”)</p>
+</blockquote>
+<p>Depending on when you last updated your computer this may, or may not, result in a bunch of output about installing the package.</p>
+<p>Next, let’s load the library:</p>
+<blockquote class="blockquote">
+<p>library(tidyverse)</p>
+</blockquote>
+<div class="cell">
+<div class="cell-output cell-output-stderr">
+<pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+✔ dplyr     1.1.4     ✔ readr     2.1.5
+✔ forcats   1.0.0     ✔ stringr   1.5.1
+✔ ggplot2   3.5.1     ✔ tibble    3.2.1
+✔ lubridate 1.9.3     ✔ tidyr     1.3.1
+✔ purrr     1.0.2     
+── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+</div>
+</div>
+<p>The output that follows <code>library("tidyverse")</code> is fairly typical and is R’s way of telling you that if you type in certain commands, such as <code>filter</code>, you may get the results of a different function than the one that you expected. The double colon notation (<code>::</code>) is a way to make sure that you got the version of the command that you wanted to use. So if you wanted to use the <code>filter</code> command from the <code>stats</code> package after this you would type <code>stats::filter</code> instead of just <code>filter</code>.</p>
+</section>
+<section id="reading-data-with-r" class="level2">
+<h2 class="anchored" data-anchor-id="reading-data-with-r">Reading data with R</h2>
+<p>Now that we have loaded the <code>tidyverse</code>, let’s go get the data file. For this example, we are using a cleaned dataset that I have created from the National Health Interview Survey to demonstrate how insurance coverage changes over time. This file is located at https://andersen-hecon.github.io/data/nhis_for_example.csv and we can load the file (and assign it to the name <code>data</code>) using the code:</p>
+<blockquote class="blockquote">
+<p>data&lt;-read_csv(“https://andersen-hecon.github.io/data/nhis_for_example.csv”)</p>
+</blockquote>
+<p>As you can see below, executing this code results in R providing some data about the file–in particular the “Delimiter,” or how the columns of data are divided (commas in this case), and the types and names of the columns.</p>
+<div class="cell">
+<div class="cell-output cell-output-stderr">
+<pre><code>Rows: 4128 Columns: 9
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: ","
+chr (1): sex
+dbl (8): year, age, pop, any_insurance, private_insurance, chip_insurance, m...
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+</div>
+</div>
+<p>We can suppress (or eliminate) this information using the option “show_col_types=FALSE” so that the code would read:</p>
+<blockquote class="blockquote">
+<p>data&lt;-read_csv(“https://andersen-hecon.github.io/data/nhis_for_example.csv”, show_col_types=FALSE)</p>
+</blockquote>
+<p>Notice now that we have loaded the file that it appears in the environment window in the top right corner of the RStudio window:</p>
+<p><img src="../images/Rstudio_show_data_env.png" class="img-fluid"></p>
+</section>
+<section id="summarizing-data" class="level2">
+<h2 class="anchored" data-anchor-id="summarizing-data">Summarizing data</h2>
+<p>We can look at the data we have loaded in several ways. The easiest (in RStudio) is to use the viewer either by clicking on the <code>data</code> object in the environment window or by typing <code>View(data)</code> in the console window. These ways of viewing the data provide a detailed, line by line, view of the data. We can achieve something similar by typing <code>data</code> or <code>print(data)</code> at the console:</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 4,128 × 9
+    year   age sex        pop any_insurance private_insurance chip_insurance
+   &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt;         &lt;dbl&gt;             &lt;dbl&gt;          &lt;dbl&gt;
+ 1  2000     0 female 1950004         0.891             0.564        0.0147 
+ 2  2000     0 male   1981206         0.886             0.617        0.00979
+ 3  2000     1 female 2021247         0.860             0.536        0.0278 
+ 4  2000     1 male   1971851         0.855             0.619        0.0147 
+ 5  2000     2 female 1912194         0.883             0.697        0.0133 
+ 6  2000     2 male   1900073         0.877             0.602        0.0126 
+ 7  2000     3 female 1724788         0.886             0.632        0.00925
+ 8  2000     3 male   2157487         0.898             0.624        0.0325 
+ 9  2000     4 female 1979674         0.885             0.691        0.0172 
+10  2000     4 male   2010541         0.892             0.674        0.0233 
+# ℹ 4,118 more rows
+# ℹ 2 more variables: mcaid_insurance &lt;dbl&gt;, mcare_insurance &lt;dbl&gt;</code></pre>
+</div>
+</div>
+<p>Please pay careful attention to the last line of the output (“# ℹ 2 more variables: mcaid_insurance <dbl>, mcare_insurance <dbl>”), which indicate that the screen wasn’t wide enough to show two of the variables (<code>mcaid_insurace</code> and <code>mcare_insurance</code>). Viewing the data allows us to see more variables and columns in RStudio:</dbl></dbl></p>
+<p><img src="../images/RStudio_data_in_viewer.png" class="img-fluid"></p>
+<p>Lastly, we can use the <code>summary</code> command to get some characteristics about the data and each variable by typing <code>summary(data)</code> at the console:</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>      year           age           sex                 pop         
+ Min.   :2000   Min.   : 0.0   Length:4128        Min.   : 192055  
+ 1st Qu.:2006   1st Qu.:21.0   Class :character   1st Qu.:1609411  
+ Median :2012   Median :42.5   Mode  :character   Median :1968180  
+ Mean   :2012   Mean   :42.5                      Mean   :1777074  
+ 3rd Qu.:2017   3rd Qu.:64.0                      3rd Qu.:2127850  
+ Max.   :2023   Max.   :85.0                      Max.   :3702858  
+ any_insurance    private_insurance chip_insurance     mcaid_insurance  
+ Min.   :0.4579   Min.   :0.2905    Min.   :0.000000   Min.   :0.00000  
+ 1st Qu.:0.8348   1st Qu.:0.5496    1st Qu.:0.000000   1st Qu.:0.05995  
+ Median :0.8965   Median :0.6312    Median :0.000000   Median :0.09480  
+ Mean   :0.8883   Mean   :0.6249    Mean   :0.010318   Mean   :0.12910  
+ 3rd Qu.:0.9688   3rd Qu.:0.7040    3rd Qu.:0.005885   3rd Qu.:0.16583  
+ Max.   :1.0000   Max.   :0.8603    Max.   :0.140555   Max.   :0.50108  
+ mcare_insurance   
+ Min.   :0.000000  
+ 1st Qu.:0.004124  
+ Median :0.024353  
+ Mean   :0.250897  
+ 3rd Qu.:0.159663  
+ Max.   :1.000000  </code></pre>
+</div>
+</div>
+<p>The <code>summary</code> command provides useful information for datasets including the number of missing observations (in these data there are no missing observations) and measures of the distribution of each numerical variable. We can look at categorical variables using a variety of commands. One of the easiest is to <code>count</code> the levels of a variable, which reports the number of observations with each combination of values that you list in the <code>count</code> command:</p>
+<p>Here we <code>count(data, sex)</code>, which lists the number of observations in <code>data</code> by <code>sex</code>.</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 2
+  sex        n
+  &lt;chr&gt;  &lt;int&gt;
+1 female  2064
+2 male    2064</code></pre>
+</div>
+</div>
+<p>You may be looking at the output above and wondering what is up with those values–do they make sense? In this case the answer is NO! When I created this dataset I aggregated an individual level dataset up to the age-by-sex-by-year, level. The (weighted) number of observations in each cell is in the variable <code>pop</code> in the dataset. As an exercise, use the help information for <code>count</code> (which you can get to by typing <code>?count</code> in the console) to figure out how you might account for the <code>pop</code> in each cell. Here is my answer:</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 2
+  sex              n
+  &lt;chr&gt;        &lt;dbl&gt;
+1 female 3745890881.
+2 male   3589870752.</code></pre>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>R allows you to chain commands together using a “pipe” character (<code>|&gt;</code> that is <code>|</code> followed by <code>&gt;</code>). This allows you to rewrite things like <code>count(data,sex)</code> as <code>data|&gt;count(sex)</code>. This feature allows you to break out the “nouns” in your process (i.e.&nbsp;<code>data</code>) from the verbs (i.e.&nbsp;<code>count(sex)</code>). I will use this notation below.</p>
+</div>
+</div>
+</section>
+<section id="the-core-dplyr-verbs" class="level2">
+<h2 class="anchored" data-anchor-id="the-core-dplyr-verbs">The core <code>dplyr</code> verbs</h2>
+<p>There are five main <code>dplyr</code> “verbs”:</p>
+<ul>
+<li><code>select</code>, which allows you to select and reorder variables from a dataframe</li>
+<li><code>mutate</code>, which allows you to create new or change existing variables (it is also possible to remove a variable).</li>
+<li><code>filter</code>, subsets a dataframe based on the condition(s) you provide in the <code>filter</code> statement</li>
+<li><code>summarize</code> aggregates a dataframe into groups that you define using either <code>group_by()</code> or the <code>.by</code> argument to <code>summarize</code></li>
+<li><code>arrange</code> sorts and reorders a dataframe</li>
+</ul>
+<section id="select" class="level3">
+<h3 class="anchored" data-anchor-id="select"><code>select</code></h3>
+<p>The <code>select</code> command allows you to subset, reorder, and rename variables from a dataframe.</p>
+<section id="subsetting" class="level4">
+<h4 class="anchored" data-anchor-id="subsetting">Subsetting</h4>
+<p>For example, if we wanted to select only the variables <code>year</code>, <code>sex</code>, and <code>age</code> from the <code>data</code> dataframe we would type:</p>
+<blockquote class="blockquote">
+<p>data|&gt;select(year,sex,age)</p>
+</blockquote>
+<p>The output would look something like this:</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 4,128 × 3
+    year sex      age
+   &lt;dbl&gt; &lt;chr&gt;  &lt;dbl&gt;
+ 1  2000 female     0
+ 2  2000 male       0
+ 3  2000 female     1
+ 4  2000 male       1
+ 5  2000 female     2
+ 6  2000 male       2
+ 7  2000 female     3
+ 8  2000 male       3
+ 9  2000 female     4
+10  2000 male       4
+# ℹ 4,118 more rows</code></pre>
+</div>
+</div>
+<p>I like to use the <code>select</code> command when I am writing code to help me make sure that I coded up a variable correctly, something that we will get to in the next command.</p>
+</section>
+<section id="reordering" class="level4">
+<h4 class="anchored" data-anchor-id="reordering">Reordering</h4>
+<p>Another use of the <code>select</code> command is to reorder the variables in a dataframe. For example, if we wanted to reorder the variables in the <code>data</code> dataframe so that <code>age</code> was the first variable, we would type:</p>
+<blockquote class="blockquote">
+<p>data|&gt;select(age,everything())</p>
+</blockquote>
+<p>The output would look something like this:</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 4,128 × 9
+     age  year sex        pop any_insurance private_insurance chip_insurance
+   &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt;         &lt;dbl&gt;             &lt;dbl&gt;          &lt;dbl&gt;
+ 1     0  2000 female 1950004         0.891             0.564        0.0147 
+ 2     0  2000 male   1981206         0.886             0.617        0.00979
+ 3     1  2000 female 2021247         0.860             0.536        0.0278 
+ 4     1  2000 male   1971851         0.855             0.619        0.0147 
+ 5     2  2000 female 1912194         0.883             0.697        0.0133 
+ 6     2  2000 male   1900073         0.877             0.602        0.0126 
+ 7     3  2000 female 1724788         0.886             0.632        0.00925
+ 8     3  2000 male   2157487         0.898             0.624        0.0325 
+ 9     4  2000 female 1979674         0.885             0.691        0.0172 
+10     4  2000 male   2010541         0.892             0.674        0.0233 
+# ℹ 4,118 more rows
+# ℹ 2 more variables: mcaid_insurance &lt;dbl&gt;, mcare_insurance &lt;dbl&gt;</code></pre>
+</div>
+</div>
+<p>Now age is the first column of the dataframe.</p>
+</section>
+<section id="renaming" class="level4">
+<h4 class="anchored" data-anchor-id="renaming">Renaming</h4>
+<p>Finally, we can use the <code>select</code> command to rename variables. For example, if we wanted to rename the variable <code>year</code> to <code>yr</code> we would type:</p>
+<blockquote class="blockquote">
+<p>data|&gt;select(yr=year, everything())</p>
+</blockquote>
+<p>The output would look something like this:</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 4,128 × 9
+      yr   age sex        pop any_insurance private_insurance chip_insurance
+   &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt;         &lt;dbl&gt;             &lt;dbl&gt;          &lt;dbl&gt;
+ 1  2000     0 female 1950004         0.891             0.564        0.0147 
+ 2  2000     0 male   1981206         0.886             0.617        0.00979
+ 3  2000     1 female 2021247         0.860             0.536        0.0278 
+ 4  2000     1 male   1971851         0.855             0.619        0.0147 
+ 5  2000     2 female 1912194         0.883             0.697        0.0133 
+ 6  2000     2 male   1900073         0.877             0.602        0.0126 
+ 7  2000     3 female 1724788         0.886             0.632        0.00925
+ 8  2000     3 male   2157487         0.898             0.624        0.0325 
+ 9  2000     4 female 1979674         0.885             0.691        0.0172 
+10  2000     4 male   2010541         0.892             0.674        0.0233 
+# ℹ 4,118 more rows
+# ℹ 2 more variables: mcaid_insurance &lt;dbl&gt;, mcare_insurance &lt;dbl&gt;</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="mutate" class="level3">
+<h3 class="anchored" data-anchor-id="mutate"><code>mutate</code></h3>
+<p>The <code>mutate</code> command can be used to create new variables by “assigning” a value to a variable name. For example, we can create a new variable <code>age_squared</code> that is the square of <code>age</code> by typing:</p>
+<blockquote class="blockquote">
+<p>data|&gt;mutate(age_squared=age^2)</p>
+</blockquote>
+<p>If you run that line of code in your console window you should see something like:</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 4,128 × 10
+    year   age sex        pop any_insurance private_insurance chip_insurance
+   &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt;         &lt;dbl&gt;             &lt;dbl&gt;          &lt;dbl&gt;
+ 1  2000     0 female 1950004         0.891             0.564        0.0147 
+ 2  2000     0 male   1981206         0.886             0.617        0.00979
+ 3  2000     1 female 2021247         0.860             0.536        0.0278 
+ 4  2000     1 male   1971851         0.855             0.619        0.0147 
+ 5  2000     2 female 1912194         0.883             0.697        0.0133 
+ 6  2000     2 male   1900073         0.877             0.602        0.0126 
+ 7  2000     3 female 1724788         0.886             0.632        0.00925
+ 8  2000     3 male   2157487         0.898             0.624        0.0325 
+ 9  2000     4 female 1979674         0.885             0.691        0.0172 
+10  2000     4 male   2010541         0.892             0.674        0.0233 
+# ℹ 4,118 more rows
+# ℹ 3 more variables: mcaid_insurance &lt;dbl&gt;, mcare_insurance &lt;dbl&gt;,
+#   age_squared &lt;dbl&gt;</code></pre>
+</div>
+</div>
+<p>Note that we have now created a new column, but we can only tell by looking at the bottom line of the output. Let’s fix that by using the <code>select</code> command:</p>
+<blockquote class="blockquote">
+<p>data|&gt;mutate(age_squared=age^2)|&gt;select(age, age_squared,everything())</p>
+</blockquote>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 4,128 × 10
+     age age_squared  year sex        pop any_insurance private_insurance
+   &lt;dbl&gt;       &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt;         &lt;dbl&gt;             &lt;dbl&gt;
+ 1     0           0  2000 female 1950004         0.891             0.564
+ 2     0           0  2000 male   1981206         0.886             0.617
+ 3     1           1  2000 female 2021247         0.860             0.536
+ 4     1           1  2000 male   1971851         0.855             0.619
+ 5     2           4  2000 female 1912194         0.883             0.697
+ 6     2           4  2000 male   1900073         0.877             0.602
+ 7     3           9  2000 female 1724788         0.886             0.632
+ 8     3           9  2000 male   2157487         0.898             0.624
+ 9     4          16  2000 female 1979674         0.885             0.691
+10     4          16  2000 male   2010541         0.892             0.674
+# ℹ 4,118 more rows
+# ℹ 3 more variables: chip_insurance &lt;dbl&gt;, mcaid_insurance &lt;dbl&gt;,
+#   mcare_insurance &lt;dbl&gt;</code></pre>
+</div>
+</div>
+<p>Now, take a look at the output. Is it correct? Is the second column the square of the first column? If not, what went wrong?</p>
+<p>We will use the <code>mutate</code> command to create a new variable that creates two variables that we will use later. First, we will create a variable <code>over65</code> that equals 1 if <code>age</code> is greater than or equal to 65.</p>
+<blockquote class="blockquote">
+<p>data|&gt;mutate(over65=if_else(age&gt;=65,1,0))</p>
+</blockquote>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 4,128 × 10
+     age over65  year sex        pop any_insurance private_insurance
+   &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt;         &lt;dbl&gt;             &lt;dbl&gt;
+ 1     0      0  2000 female 1950004         0.891             0.564
+ 2     0      0  2000 male   1981206         0.886             0.617
+ 3     1      0  2000 female 2021247         0.860             0.536
+ 4     1      0  2000 male   1971851         0.855             0.619
+ 5     2      0  2000 female 1912194         0.883             0.697
+ 6     2      0  2000 male   1900073         0.877             0.602
+ 7     3      0  2000 female 1724788         0.886             0.632
+ 8     3      0  2000 male   2157487         0.898             0.624
+ 9     4      0  2000 female 1979674         0.885             0.691
+10     4      0  2000 male   2010541         0.892             0.674
+# ℹ 4,118 more rows
+# ℹ 3 more variables: chip_insurance &lt;dbl&gt;, mcaid_insurance &lt;dbl&gt;,
+#   mcare_insurance &lt;dbl&gt;</code></pre>
+</div>
+</div>
+<p>Let’s look at <code>over65</code> using <code>count</code> too:</p>
+<blockquote class="blockquote">
+<p>count(data,over65)</p>
+</blockquote>
+<div class="cell">
+<div class="cell-output cell-output-error">
+<pre><code>Error in `count()`:
+! Must group by variables found in `.data`.
+✖ Column `over65` is not found.</code></pre>
+</div>
+</div>
+<p>Wait! We got an error! Why? Because <code>over65</code> isn’t there! What happened?</p>
+<p>R doesn’t update a dataframe with the calculations that you did, unless you explicitly tell it to do so. How do we do that? We can use the <code>=</code> or <code>&lt;-</code>. The differences between these two are a bit technical and not worth diving into. For now, let’s run that command again, but this time assign the results to <code>data</code>:</p>
+<blockquote class="blockquote">
+<p>data&lt;-data|&gt;mutate(over65=if_else(age&gt;=65,1,0))</p>
+</blockquote>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 2
+  over65     n
+   &lt;dbl&gt; &lt;int&gt;
+1      0  3120
+2      1  1008</code></pre>
+</div>
+</div>
+<p>Now, let’s create one more variable <code>age_minus_65</code> which, as the name suggests, is simply <code>age</code> minus 65:</p>
+<blockquote class="blockquote">
+<p>data&lt;-data|&gt;mutate(age_minus_65=age-65)</p>
+</blockquote>
+<p>We can check if we got it right by <code>count</code>ing the <code>age</code> and <code>age_minus_65</code>:</p>
+<blockquote class="blockquote">
+<p>data|&gt;count(age,age_minus_65)</p>
+</blockquote>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 86 × 3
+     age age_minus_65     n
+   &lt;dbl&gt;        &lt;dbl&gt; &lt;int&gt;
+ 1     0          -65    48
+ 2     1          -64    48
+ 3     2          -63    48
+ 4     3          -62    48
+ 5     4          -61    48
+ 6     5          -60    48
+ 7     6          -59    48
+ 8     7          -58    48
+ 9     8          -57    48
+10     9          -56    48
+# ℹ 76 more rows</code></pre>
+</div>
+</div>
+</section>
+<section id="filter" class="level3">
+<h3 class="anchored" data-anchor-id="filter"><code>filter</code></h3>
+<p>The <code>filter</code> command allows you to subset the rows of your data (not columns, which is what <code>select</code> does) using a conditional expression. For example, if we wanted to select only the rows of the <code>data</code> dataframe where <code>age</code> is greater than or equal to 65 we would type:</p>
+<blockquote class="blockquote">
+<p>data|&gt;filter(age&gt;=65)</p>
+</blockquote>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1,008 × 11
+    year   age sex        pop any_insurance private_insurance chip_insurance
+   &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt;         &lt;dbl&gt;             &lt;dbl&gt;          &lt;dbl&gt;
+ 1  2000    65 female 1132678         0.982             0.620              0
+ 2  2000    65 male    937803         0.978             0.725              0
+ 3  2000    66 female  872208         0.997             0.603              0
+ 4  2000    66 male    784400         0.954             0.625              0
+ 5  2000    67 female  993634         0.967             0.630              0
+ 6  2000    67 male    893301         0.955             0.666              0
+ 7  2000    68 female 1079059         0.993             0.635              0
+ 8  2000    68 male    733120         0.957             0.646              0
+ 9  2000    69 female  968159         0.991             0.692              0
+10  2000    69 male    681218         1                 0.699              0
+# ℹ 998 more rows
+# ℹ 4 more variables: mcaid_insurance &lt;dbl&gt;, mcare_insurance &lt;dbl&gt;,
+#   over65 &lt;dbl&gt;, age_minus_65 &lt;dbl&gt;</code></pre>
+</div>
+</div>
+<p>In this output, the first value of <code>age</code> that we see is 65, which is what we would expect.</p>
+<p>You can also do more complicated expressions. For example, if we wanted to select only the rows of the <code>data</code> dataframe where <code>age</code> is greater than or equal to 65 and <code>sex</code> is equal to 1 we would type:</p>
+<blockquote class="blockquote">
+<p>data|&gt;filter(age&gt;=65, sex==1)</p>
+</blockquote>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 0 × 11
+# ℹ 11 variables: year &lt;dbl&gt;, age &lt;dbl&gt;, sex &lt;chr&gt;, pop &lt;dbl&gt;,
+#   any_insurance &lt;dbl&gt;, private_insurance &lt;dbl&gt;, chip_insurance &lt;dbl&gt;,
+#   mcaid_insurance &lt;dbl&gt;, mcare_insurance &lt;dbl&gt;, over65 &lt;dbl&gt;,
+#   age_minus_65 &lt;dbl&gt;</code></pre>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip: Logical comparisons in R
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Symbol</th>
+<th>Description</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>&gt;</td>
+<td>Greater than</td>
+<td>5 &gt; 6 returns FALSE</td>
+</tr>
+<tr class="even">
+<td>&lt;</td>
+<td>Less than</td>
+<td>5 &lt; 6 returns TRUE</td>
+</tr>
+<tr class="odd">
+<td>==</td>
+<td>Equals to</td>
+<td>10 == 10 returns TRUE</td>
+</tr>
+<tr class="even">
+<td>!=</td>
+<td>Not equal to</td>
+<td>10 != 10 returns FALSE</td>
+</tr>
+<tr class="odd">
+<td>&gt;=</td>
+<td>Greater than or equal to</td>
+<td>5 &gt;= 6 returns FALSE</td>
+</tr>
+<tr class="even">
+<td>&lt;=</td>
+<td>Less than or equal to</td>
+<td>6 &lt;= 6 returns TRUE</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>When using the <code>filter</code> command, you can put in multiple statements (like we did to filter by age AND sex). But, when you do that the <code>filter</code> command only keeps rows that meet all of those criteria. If you want to keep rows that meet any of the criteria you can use the <code>|</code> symbol. For example, if we wanted to select only the rows of the <code>data</code> dataframe where <code>age</code> is greater than or equal to 65 OR <code>sex</code> is equal to 1 we would type:</p>
+<blockquote class="blockquote">
+<p>data|&gt;filter(age&gt;=65 | sex==1)</p>
+</blockquote>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1,008 × 11
+    year   age sex        pop any_insurance private_insurance chip_insurance
+   &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt;         &lt;dbl&gt;             &lt;dbl&gt;          &lt;dbl&gt;
+ 1  2000    65 female 1132678         0.982             0.620              0
+ 2  2000    65 male    937803         0.978             0.725              0
+ 3  2000    66 female  872208         0.997             0.603              0
+ 4  2000    66 male    784400         0.954             0.625              0
+ 5  2000    67 female  993634         0.967             0.630              0
+ 6  2000    67 male    893301         0.955             0.666              0
+ 7  2000    68 female 1079059         0.993             0.635              0
+ 8  2000    68 male    733120         0.957             0.646              0
+ 9  2000    69 female  968159         0.991             0.692              0
+10  2000    69 male    681218         1                 0.699              0
+# ℹ 998 more rows
+# ℹ 4 more variables: mcaid_insurance &lt;dbl&gt;, mcare_insurance &lt;dbl&gt;,
+#   over65 &lt;dbl&gt;, age_minus_65 &lt;dbl&gt;</code></pre>
+</div>
+</div>
+<p>Think about how you would check if you got the right answer. What would you do?</p>
+</section>
+<section id="summarize" class="level3">
+<h3 class="anchored" data-anchor-id="summarize">summarize</h3>
+<p>Sometimes you want to summarize or aggregate your data, either to simplify your analysis later on, make a dataset that is easier for students to use, or other reasons. You do that with the <code>summarize</code> verb in R. For example, if we wanted to summarize the <code>data</code> dataframe by <code>year</code> and <code>sex</code> we would type: &gt; data|&gt;group_by(year,sex)|&gt;summarize(mean_age=mean(age),n=n())</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>data<span class="sc">|&gt;</span><span class="fu">group_by</span>(year,sex)<span class="sc">|&gt;</span><span class="fu">summarize</span>(<span class="at">mean_age=</span><span class="fu">mean</span>(age),<span class="at">n=</span><span class="fu">n</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>`summarise()` has grouped output by 'year'. You can override using the
+`.groups` argument.</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 48 × 4
+# Groups:   year [24]
+    year sex    mean_age     n
+   &lt;dbl&gt; &lt;chr&gt;     &lt;dbl&gt; &lt;int&gt;
+ 1  2000 female     42.5    86
+ 2  2000 male       42.5    86
+ 3  2001 female     42.5    86
+ 4  2001 male       42.5    86
+ 5  2002 female     42.5    86
+ 6  2002 male       42.5    86
+ 7  2003 female     42.5    86
+ 8  2003 male       42.5    86
+ 9  2004 female     42.5    86
+10  2004 male       42.5    86
+# ℹ 38 more rows</code></pre>
+</div>
+</div>
+<p>Hmmm…. this doesn’t look right, does it? Every combination appears to have the same <code>mean_age</code> and <code>n</code>. What went wrong? The problem is that we didn’t tell R to calculate the mean and count taking into account the number of observations wihtin each cell. We can do that in one of two ways. We can use the <code>weighted.mean</code> command to compute the weighted mean (and then use the <code>sum</code> command to get the sum of pop). But we can also go back to “first principles” and remember that the mean of a variable is the sum of the variable times the weight divided by the sum of the weight.</p>
+<p>So, we can calculate the mean of <code>age</code> by <code>year</code> and <code>sex</code> by typing:</p>
+<blockquote class="blockquote">
+<p>data|&gt;group_by(year,sex)|&gt;summarize( mean_age=sum(age*pop)/sum(pop), n=sum(pop))</p>
+</blockquote>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>data<span class="sc">|&gt;</span><span class="fu">group_by</span>(year,sex)<span class="sc">|&gt;</span><span class="fu">summarize</span>(</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">mean_age=</span><span class="fu">sum</span>(age<span class="sc">*</span>pop)<span class="sc">/</span><span class="fu">sum</span>(pop),</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a> <span class="at">n=</span><span class="fu">sum</span>(pop))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>`summarise()` has grouped output by 'year'. You can override using the
+`.groups` argument.</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 48 × 4
+# Groups:   year [24]
+    year sex    mean_age         n
+   &lt;dbl&gt; &lt;chr&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+ 1  2000 female     36.3 140398513
+ 2  2000 male       34.3 133625780
+ 3  2001 female     36.5 141586626
+ 4  2001 male       34.4 134894673
+ 5  2002 female     36.6 142734367
+ 6  2002 male       34.6 136060670
+ 7  2003 female     37.0 146414283
+ 8  2003 male       34.8 139600816
+ 9  2004 female     37.2 147355026
+10  2004 male       35.0 140902784
+# ℹ 38 more rows</code></pre>
+</div>
+</div>
+<p>This looks better. There is now some variation in the average age and the group sizes. In the next page, we will dive into this a bit more carefully when we introduce <code>ggplot</code> as a means to visualize data.</p>
+<p>Wait a minute, what is <code>gorup_by</code> doing? <code>group_by</code> is a little helper verb that makes everything that follows run at the level of each individual group. For <code>mutate</code> this isn’t (usually) a big deal, but for <code>summarize</code> it is vital because that is how we tell <code>summarize</code> what groups to use for <code>summarize</code>ing the data.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip: <code>group_by</code> and <code>.by</code>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Most <code>tidyverse</code> commands that work with groups have a <code>.by</code> argument that allows you to specify the groups that you want to use. For example, you could have written the <code>summarize</code> command above as: &gt; data|&gt;summarize( &gt; mean_age=sum(age*pop)/sum(pop), &gt; n=sum(pop), .by=c(year,sex))</p>
+<p>Where the final <code>c</code> function tells R to use BOTH <code>year</code> and <code>sex</code> together to construct the groups.</p>
+</div>
+</div>
+<section id="summarizing-multiple-variables-at-once" class="level4">
+<h4 class="anchored" data-anchor-id="summarizing-multiple-variables-at-once">Summarizing multiple variables at once</h4>
+<p>Suppose we wanted to compute the weighted average of a few more variables (not just age). Maybe we wanted to look at changes in isnurance coverage by <code>year</code> (we will ignore <code>sex</code> for the moment). We can use the <code>across</code> command to help us out. <code>across</code> takes a list of variable names and a function template to do the same computation across the columns. To calculate the average age, the average of <code>mcaid_insurance</code>, the average of <code>pricate_insruance</code>. and the average of <code>mcare_insurance</code> by <code>year</code> we would type:</p>
+<blockquote class="blockquote">
+<p>data|&gt;group_by(year)|&gt; summarize( across( c(age,mcaid_insurance,private_insurance,mcare_insurance), ~sum(.x*pop)/sum(pop) ) )</p>
+</blockquote>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>data<span class="sc">|&gt;</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(year)<span class="sc">|&gt;</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="fu">across</span>(<span class="fu">c</span>(age,mcaid_insurance,private_insurance,mcare_insurance),<span class="sc">~</span><span class="fu">sum</span>(.x<span class="sc">*</span>pop)<span class="sc">/</span><span class="fu">sum</span>(pop)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 24 × 5
+    year   age mcaid_insurance private_insurance mcare_insurance
+   &lt;dbl&gt; &lt;dbl&gt;           &lt;dbl&gt;             &lt;dbl&gt;           &lt;dbl&gt;
+ 1  2000  35.3          0.0810             0.708           0.125
+ 2  2001  35.5          0.0806             0.708           0.125
+ 3  2002  35.6          0.0928             0.688           0.124
+ 4  2003  36.0          0.0947             0.674           0.125
+ 5  2004  36.1          0.0963             0.672           0.127
+ 6  2005  36.3          0.102              0.663           0.131
+ 7  2006  36.4          0.110              0.644           0.134
+ 8  2007  36.5          0.111              0.648           0.136
+ 9  2008  36.7          0.115              0.639           0.141
+10  2009  36.9          0.124              0.617           0.141
+# ℹ 14 more rows</code></pre>
+</div>
+</div>
+<p>Now we see that we have the columns that we want!</p>
+</section>
+</section>
+<section id="arrange" class="level3">
+<h3 class="anchored" data-anchor-id="arrange"><code>arrange</code></h3>
+<p>The final verb we will cover is <code>arrange</code>, which is used to <code>arrange</code> or order a dataframe. For example, if we wanted to order the <code>data</code> dataframe by <code>age</code> we would type:</p>
+<blockquote class="blockquote">
+<p>data|&gt;arrange(year)</p>
+</blockquote>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 4,128 × 11
+    year   age sex        pop any_insurance private_insurance chip_insurance
+   &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt;         &lt;dbl&gt;             &lt;dbl&gt;          &lt;dbl&gt;
+ 1  2000     0 female 1950004         0.891             0.564        0.0147 
+ 2  2000     0 male   1981206         0.886             0.617        0.00979
+ 3  2001     0 female 1945606         0.942             0.675        0.0239 
+ 4  2001     0 male   1995217         0.921             0.626        0.0225 
+ 5  2002     0 female 1931185         0.938             0.579        0.0343 
+ 6  2002     0 male   2010451         0.926             0.554        0.0469 
+ 7  2003     0 female 1849941         0.936             0.540        0.0118 
+ 8  2003     0 male   2020784         0.942             0.517        0.0273 
+ 9  2004     0 female 1923205         0.943             0.500        0.0212 
+10  2004     0 male   1968188         0.940             0.551        0.0442 
+# ℹ 4,118 more rows
+# ℹ 4 more variables: mcaid_insurance &lt;dbl&gt;, mcare_insurance &lt;dbl&gt;,
+#   over65 &lt;dbl&gt;, age_minus_65 &lt;dbl&gt;</code></pre>
+</div>
+</div>
+<p>Now we see the values for age 0 by year and then if you went down the table you would see the values for age 1 by year, and so on.</p>
+<p>We can even arrange by more than one variable by simply adding another variable to the list:</p>
+<blockquote class="blockquote">
+<p>data|&gt;arrange(year,any_insurance)</p>
+</blockquote>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 4,128 × 11
+    year   age sex         pop any_insurance private_insurance chip_insurance
+   &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;     &lt;dbl&gt;         &lt;dbl&gt;             &lt;dbl&gt;          &lt;dbl&gt;
+ 1  2000     0 male   1981206          0.886             0.617        0.00979
+ 2  2000     0 female 1950004          0.891             0.564        0.0147 
+ 3  2019     0 female 1877997.         0.914             0.523        0.0461 
+ 4  2001     0 male   1995217          0.921             0.626        0.0225 
+ 5  2002     0 male   2010451          0.926             0.554        0.0469 
+ 6  2007     0 female 2062998          0.929             0.437        0.0541 
+ 7  2012     0 female 1879587          0.930             0.371        0.0496 
+ 8  2010     0 male   1974740          0.934             0.505        0.0358 
+ 9  2008     0 male   2052277          0.934             0.478        0.0484 
+10  2006     0 male   2085037          0.936             0.473        0.0389 
+# ℹ 4,118 more rows
+# ℹ 4 more variables: mcaid_insurance &lt;dbl&gt;, mcare_insurance &lt;dbl&gt;,
+#   over65 &lt;dbl&gt;, age_minus_65 &lt;dbl&gt;</code></pre>
+</div>
+</div>
+<p>Now the data are sorted by age and then the fraction with any private insurance. But what if we wanted to see the year when each age group had the highest level of insurance? Then we need to switch from the default “ascending” sort order to a “descending” sort order, which we can do with the <code>desc</code> operator:</p>
+<blockquote class="blockquote">
+<p>data|&gt;arrange(year,desc(any_insurance))</p>
+</blockquote>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 4,128 × 11
+    year   age sex         pop any_insurance private_insurance chip_insurance
+   &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;     &lt;dbl&gt;         &lt;dbl&gt;             &lt;dbl&gt;          &lt;dbl&gt;
+ 1  2020     0 female 2201385.         0.992             0.423        0.0247 
+ 2  2011     0 male   2052705          0.988             0.444        0.0697 
+ 3  2018     0 male   1986534          0.985             0.543        0.0535 
+ 4  2017     0 female 1767121          0.984             0.500        0.0367 
+ 5  2018     0 female 1940610          0.983             0.565        0.00631
+ 6  2023     0 male   1882530          0.983             0.585        0.0204 
+ 7  2016     0 female 1886954          0.978             0.593        0.0113 
+ 8  2016     0 male   1930821          0.977             0.504        0.0265 
+ 9  2015     0 female 1964199          0.977             0.472        0.0393 
+10  2011     0 female 1868103          0.976             0.487        0.0429 
+# ℹ 4,118 more rows
+# ℹ 4 more variables: mcaid_insurance &lt;dbl&gt;, mcare_insurance &lt;dbl&gt;,
+#   over65 &lt;dbl&gt;, age_minus_65 &lt;dbl&gt;</code></pre>
+</div>
+</div>
+<p>Now we have <code>any_insurance</code> in a decreasing order within each of the <code>age</code> groups.</p>
+</section>
+</section>
+<section id="practice" class="level2">
+<h2 class="anchored" data-anchor-id="practice">Practice</h2>
+<p>Here are some practice exercises that you can do with the <code>data</code> dataframe and the core <code>dplyr</code> verbs.</p>
+<ol type="1">
+<li>Calculate average insurance coverage (for each type) using the <code>over65</code> variable that we created earlier by year.</li>
+</ol>
+<div class="callout callout-style-default callout-note callout-titled" title="My result">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+My result
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>To highlight an event of particular interest, I am going to show results for the years 2012 through 2016</p>
+<div class="cell">
+<div class="cell-output cell-output-stderr">
+<pre><code>`summarise()` has grouped output by 'over65'. You can override using the
+`.groups` argument.</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 10 × 7
+# Groups:   over65 [2]
+   over65  year   age any_insurance mcaid_insurance private_insurance
+    &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;         &lt;dbl&gt;           &lt;dbl&gt;             &lt;dbl&gt;
+ 1      0  2012  31.8         0.831          0.148              0.616
+ 2      0  2013  31.9         0.832          0.149              0.613
+ 3      0  2014  32.0         0.862          0.171              0.629
+ 4      0  2015  32.0         0.889          0.185              0.649
+ 5      0  2016  32.1         0.895          0.196              0.650
+ 6      1  2012  74.0         0.992          0.0680             0.516
+ 7      1  2013  73.9         0.989          0.0734             0.497
+ 8      1  2014  73.8         0.991          0.0744             0.501
+ 9      1  2015  73.8         0.994          0.0789             0.488
+10      1  2016  73.7         0.991          0.0776             0.482
+# ℹ 1 more variable: mcare_insurance &lt;dbl&gt;</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<ol start="2" type="1">
+<li>Calculate the number of people with any insurance by year</li>
+</ol>
+<div class="callout callout-style-default callout-tip callout-titled" title="Hint">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Hint
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>You will need to do a calculation along the way. You can either do that in a <code>mutate</code> step or in the <code>summarize</code> step. I would recommend the <code>mutate</code> step.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled" title="My result">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+My result
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 24 × 2
+    year number_insured
+   &lt;dbl&gt;          &lt;dbl&gt;
+ 1  2000      232859140
+ 2  2001      237860025
+ 3  2002      238411316
+ 4  2003      242788085
+ 5  2004      245359798
+ 6  2005      247344515
+ 7  2006      247511543
+ 8  2007      252161957
+ 9  2008      254112178
+10  2009      253840146
+# ℹ 14 more rows</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<ol start="3" type="1">
+<li>Create a new variable <code>post_ACA</code> that equals 1 if the year if greater than or equal 2014 and 0 otherwise. Then calculate the average of <code>any_insurance</code> in each of the cells defined by <code>post_ACA</code>, <code>over65</code> and <code>sex</code>.</li>
+</ol>
+<div class="callout callout-style-default callout-note callout-titled" title="My result">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+My result
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-7" class="callout-7-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="cell-output cell-output-stderr">
+<pre><code>`summarise()` has grouped output by 'post_ACA', 'over65'. You can override
+using the `.groups` argument.</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 8 × 4
+# Groups:   post_ACA, over65 [4]
+  post_ACA over65 sex    any_insurance
+     &lt;dbl&gt;  &lt;dbl&gt; &lt;chr&gt;          &lt;dbl&gt;
+1        0      0 female         0.843
+2        0      0 male           0.817
+3        0      1 female         0.990
+4        0      1 male           0.989
+5        1      0 female         0.899
+6        1      0 male           0.876
+7        1      1 female         0.992
+8        1      1 male           0.992</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp("https:\/\/andersen-hecon\.github\.io\/");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
