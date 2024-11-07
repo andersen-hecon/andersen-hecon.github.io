@@ -1,5 +1,9 @@
 project:
   type: website
+  
+resources:
+  - "teaching_resources/nhis_for_example.csv"
+
 
 website:
   title: "Martin S Andersen"
@@ -19,9 +23,7 @@ website:
   twitter-card: true
   open-graph: true
   google-analytics: G-J57709YH4W
-  resources:
-    - "teaching_resources/nhis_for_example.csv"
-
+  
 
 format:
   html:
