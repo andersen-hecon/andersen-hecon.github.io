@@ -2,26 +2,30 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://andersen-hecon.github.io/teaching_resources/reading_in_data_in_R.html</loc>
-    <lastmod>2024-11-07T19:20:56.227Z</lastmod>
-  </url>
-  <url>
-    <loc>https://andersen-hecon.github.io/enrollment_trends.html</loc>
-    <lastmod>2024-11-07T19:20:56.223Z</lastmod>
-  </url>
-  <url>
-    <loc>https://andersen-hecon.github.io/Research.html</loc>
-    <lastmod>2024-11-07T19:20:56.215Z</lastmod>
-  </url>
-  <url>
-    <loc>https://andersen-hecon.github.io/Teaching.html</loc>
-    <lastmod>2024-11-07T19:20:56.215Z</lastmod>
-  </url>
-  <url>
-    <loc>https://andersen-hecon.github.io/about.html</loc>
-    <lastmod>2024-11-07T19:20:56.223Z</lastmod>
+    <lastmod>2024-11-11T16:52:25.005Z</lastmod>
   </url>
   <url>
     <loc>https://andersen-hecon.github.io/index.html</loc>
-    <lastmod>2024-11-07T19:20:56.223Z</lastmod>
+    <lastmod>2024-11-11T16:52:25.001Z</lastmod>
+  </url>
+  <url>
+    <loc>https://andersen-hecon.github.io/about.html</loc>
+    <lastmod>2024-11-11T16:52:25.001Z</lastmod>
+  </url>
+  <url>
+    <loc>https://andersen-hecon.github.io/Teaching.html</loc>
+    <lastmod>2024-11-11T16:52:24.993Z</lastmod>
+  </url>
+  <url>
+    <loc>https://andersen-hecon.github.io/Research.html</loc>
+    <lastmod>2024-11-11T16:52:24.993Z</lastmod>
+  </url>
+  <url>
+    <loc>https://andersen-hecon.github.io/enrollment_trends.html</loc>
+    <lastmod>2024-11-11T16:52:25.001Z</lastmod>
+  </url>
+  <url>
+    <loc>https://andersen-hecon.github.io/teaching_resources/visualizations.html</loc>
+    <lastmod>2024-11-11T16:52:25.005Z</lastmod>
   </url>
 </urlset>

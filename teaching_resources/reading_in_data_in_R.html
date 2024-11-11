@@ -182,6 +182,7 @@ gtag('config', 'G-J57709YH4W', { 'anonymize_ip': true});
   <li><a href="#summarize" id="toc-summarize" class="nav-link" data-scroll-target="#summarize">summarize</a></li>
   <li><a href="#arrange" id="toc-arrange" class="nav-link" data-scroll-target="#arrange"><code>arrange</code></a></li>
   </ul></li>
+  <li><a href="#saving-your-work" id="toc-saving-your-work" class="nav-link" data-scroll-target="#saving-your-work">Saving your work</a></li>
   <li><a href="#practice" id="toc-practice" class="nav-link" data-scroll-target="#practice">Practice</a></li>
   </ul>
 </nav>
@@ -210,7 +211,7 @@ gtag('config', 'G-J57709YH4W', { 'anonymize_ip': true});
 
 <section id="getting-started" class="level2">
 <h2 class="anchored" data-anchor-id="getting-started">Getting started</h2>
-<p>In this page we will get started using R to read in data. In other webpages we will work on installing R and RStudio, installing packages, and analyzing the data that we have read in.</p>
+<p>In this page we will get started using R to read in data, installing packages, and manipulating data.</p>
 <p>To read in our data, we will use R’s <code>tidyverse</code> family of libraries. Before we begin, let’s make sure that we have the most recent version of <code>tidyverse</code> installed:</p>
 <blockquote class="blockquote">
 <p>install.packages(“tidyverse”)</p>
@@ -495,7 +496,7 @@ Tip
 </div>
 </div>
 <p>Now, take a look at the output. Is it correct? Is the second column the square of the first column? If not, what went wrong?</p>
-<p>We will use the <code>mutate</code> command to create a new variable that creates two variables that we will use later. First, we will create a variable <code>over65</code> that equals 1 if <code>age</code> is greater than or equal to 65.</p>
+<p>We will use the <code>mutate</code> command to create a new variable that creates two variables that we will use later. First, we will create a variable <code>over65</code> that equals 1 if <code>age</code> is greater than or equal to 65. In order to do this, we will use the <code>if_else</code> command, which is a way to create a conditional variable. The <code>if_else</code> command takes three arguments: the condition, the value if the condition is true, and the value if the condition is false. For example, if we wanted to create a variable <code>over65</code> that equals 1 if <code>age</code> is greater than or equal to 65 and 0 otherwise we would type:</p>
 <blockquote class="blockquote">
 <p>data|&gt;mutate(over65=if_else(age&gt;=65,1,0))</p>
 </blockquote>
@@ -871,6 +872,14 @@ Tip: <code>group_by</code> and <code>.by</code>
 </div>
 <p>Now we have <code>any_insurance</code> in a decreasing order within each of the <code>age</code> groups.</p>
 </section>
+</section>
+<section id="saving-your-work" class="level2">
+<h2 class="anchored" data-anchor-id="saving-your-work">Saving your work</h2>
+<p>Before we leave this page, we should save our work. We will use the <code>write_csv</code> command to do this. Before you save the file though, you should check where it will be saved. This is called your “working directory” and you can see what it is using <code>getwd()</code>. Type it in the console and you should see a location on your hard drive. Does this location seem right for you? If not, you can change it using the <code>setwd</code> command.</p>
+<p>Now that you have chosen the folder, let’s save the file:</p>
+<blockquote class="blockquote">
+<p>data|&gt;write_csv(“nhis_working_data.csv”)</p>
+</blockquote>
 </section>
 <section id="practice" class="level2">
 <h2 class="anchored" data-anchor-id="practice">Practice</h2>
