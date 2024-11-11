@@ -1,5 +1,5 @@
 ---
-title: "Reading in data and basic data manipulation using R"
+title: "Visualizing data in R"
 format: html
   # closeread-html:
   #   remove-header-space: true
